@@ -5,9 +5,8 @@ using UnityEngine;
 namespace Features.Grid
 {
     [Serializable]
-    public class Tile : IGridElement
+    public class Tile 
     {
-        public Vector2Int Position { get; set; }
         public List<TileComponent> Components = new List<TileComponent>();
         
         public void AddComponent(TileComponent component)

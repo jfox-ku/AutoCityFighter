@@ -4,14 +4,10 @@ using UnityEngine;
 
 namespace Features.Grid
 {
-    public interface IGridElement
-    {
-        Vector2Int Position { get; set; }
-    }
-
     [Serializable]
     public class Grid
     {
+        private GridConfig _config;
         // Use this for serialization
         [SerializeField] 
         private List<TileData> _tileDataList = new List<TileData>();
@@ -20,17 +16,22 @@ namespace Features.Grid
         [NonSerialized]
         public Dictionary<Vector2Int, Tile> Tiles = new Dictionary<Vector2Int, Tile>();
 
-        public void Initialize(Vector2Int size)
+        public void Initialize(GridConfig config)
         {
-            for (int x = 0; x < size.x; x++)
+            for (int x = 0; x < config.MaxSize.x; x++)
             {
-                for (int y = 0; y < size.y; y++)
+                for (int y = 0; y < config.MaxSize.y; y++)
                 {
-                    var tile = new Tile {Position = new Vector2Int(x, y)};
-                    Tiles.Add(tile.Position, tile);
+                    var tile = new Tile {};
+                    var positionComp = new TilePositionComponent()
+                    {
+                        Position = new Vector2Int(x, y)
+                    };
+                    tile.AddComponent(positionComp);
+                    Tiles.Add(positionComp.Position, tile);
                     if (x % 2 == 0)
                     {
-                        tile.AddComponent(new OccupiedTileFlagComponent());
+                        tile.AddComponent(new TileOwnedFlagComponent());
                     }
                 }
             }
